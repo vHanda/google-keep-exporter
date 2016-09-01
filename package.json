@@ -1,0 +1,14 @@
+{
+  "name": "google-keep-exporter",
+  "version": "1.0.0",
+  "description": "This is a tool which converts the Google Keep archive to markdown documents with YAML front matter. The Google Keep archive can be obtained from the Google Takeout page.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "dependencies": {
+    "cheerio": "0.22.0",
+    "to-markdown": "^3.0.1"
+  }
+}
