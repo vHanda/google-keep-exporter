@@ -6,9 +6,14 @@ var uuidV4 = require('uuid/v4');
  */
 var serialize = function(note) {
     // FIXME: Serialize the attachments!
-    return [
-        [generateFilename(note), generateOutputFile(note)]
-    ];
+    var out = note.attachments.map(generateAttachment);
+    var mainOutput = generateOutputFile(note);
+    out.forEach(a => {
+        var fileName = a[0];
+        mainOutput += '\n![](./' + fileName + ')\n';
+    });
+    out.push([generateFilename(note), mainOutput]);
+    return out;
 };
 
 
@@ -58,6 +63,15 @@ function generateFilename(note) {
         return newStr;
     }
     return sanitizeString(note.title || note.date || uuidV4()) + '.md';
+}
+
+function generateAttachment(a) {
+    var regex = /^data:.+\/(.+);base64,(.*)$/;
+    var matches = a.substr(0, 100).match(regex);
+    var ext = matches[1];
+    var data = a.substr(a.indexOf('base64') + 7)
+    var buffer = new Buffer(data, 'base64');
+    return [uuidV4() + '.' + ext, buffer];
 }
 
 module.exports = {

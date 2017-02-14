@@ -28,11 +28,10 @@ var convert = function(filePath, outputDir) {
 	var note = parser(data);
 	var output = serializer.serialize(note);
 
-	if (output.length == 1) {
-		var d = output[0];
-		console.log(d[0]);
+	output.forEach(d => {
+		console.log(filePath, d[0]);
 		fs.writeFileSync(outputDir + '/' + d[0], d[1]);
-	}
+	});
 }
 
 var files = fs.readdirSync(inputDir);
