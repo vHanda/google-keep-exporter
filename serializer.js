@@ -21,7 +21,16 @@ var generateYamlFrontMatter = function(note) {
         if (key == 'content' || key == 'attachments')
             continue
 
-        lines.push(key + ': ' + note[key]);
+        var val = note[key];
+        if (val instanceof Array) {
+            val = '[' + val.join(', ') + ']';
+        } else {
+            val = '' + val; // convert to string
+        }
+        if (val.trim().length == 0 || val == 'false')
+            continue
+
+        lines.push(key + ': ' + val);
     }
     lines.push('---')
 
