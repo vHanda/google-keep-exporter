@@ -23,6 +23,8 @@ var generateYamlFrontMatter = function(note) {
 
         var val = note[key];
         if (val instanceof Array) {
+            if (val.length == 0)
+                continue
             val = '[' + val.join(', ') + ']';
         } else {
             val = '' + val; // convert to string
