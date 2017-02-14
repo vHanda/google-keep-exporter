@@ -45,7 +45,17 @@ function generateOutputFile(note) {
 
 function generateFilename(note) {
     function sanitizeString(str) {
-        return str;
+        var newStr = "";
+        var re = /[A-Za-z0-9- ]/;
+        for (var key in str) {
+            var char = str[key];
+            if (char.match(re))
+                if (char == ' ')
+                    newStr += '-'
+                else
+                    newStr += char
+        }
+        return newStr;
     }
     return sanitizeString(note.title || note.date || uuidV4()) + '.md';
 }
