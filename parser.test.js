@@ -19,6 +19,6 @@ suite('Parser', function() {
 		assert.deepEqual(note.content, "Hearts of darkness  \nWater ship down  \nThe Dubliners");
 		assert.deepEqual(note.tags, ['Reading List', 'Another Tag']);
 		assert.notOk(note.archived);
-		assert.deepEqual(note.date, "21 Jun 2016, 22:39:47");
+		assert.deepEqual(note.date, "2016-06-21T20:39:47.000Z");
 	});
 });

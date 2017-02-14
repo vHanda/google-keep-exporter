@@ -1,5 +1,6 @@
 var cheerio = require('cheerio');
 var toMarkdown = require('to-markdown');
+var moment = require('moment');
 
 function parse(data) {
 	var $ = cheerio.load(data);
@@ -8,8 +9,10 @@ function parse(data) {
 	note.content = $(".content").html();
 	note.content = toMarkdown(note.content).trim();
 
-	// FIXME: Date parsing!
+	// FIXME: What about timezone?
 	note.date = $(".heading").text().trim();
+	note.date = moment(note.date).toISOString();
+
 	note.title = $(".title").text().trim();
 	note.archived = $.contains(".archived");
 
