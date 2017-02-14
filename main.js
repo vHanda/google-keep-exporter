@@ -15,18 +15,26 @@ var serializer = require('./serializer.js');
 //    -> listitem
 //
 
-if (process.argv.length != 3) {
-    console.log("Usage main.js html-file");
+if (process.argv.length != 4) {
+    console.log("Usage main.js inputDir outputDir");
     process.exit(1);
 }
 
-var filePath = process.argv[2];
-var data = fs.readFileSync(filePath);
-var note = parser(data);
-var output = serializer.serialize(note);
+var inputDir = process.argv[2];
+var outputDir = process.argv[3];
 
-if (output.length == 1) {
-	var d = output[0];
-	console.log(d[0]);
-	fs.writeFileSync(d[0], d[1]);
+var convert = function(filePath, outputDir) {
+	var data = fs.readFileSync(filePath);
+	var note = parser(data);
+	var output = serializer.serialize(note);
+
+	if (output.length == 1) {
+		var d = output[0];
+		console.log(d[0]);
+		fs.writeFileSync(outputDir + '/' + d[0], d[1]);
+	}
 }
+
+var files = fs.readdirSync(inputDir);
+files = files.filter(t => t.endsWith('.html'));
+files.forEach(filePath => convert(inputDir + '/' + filePath, outputDir))
