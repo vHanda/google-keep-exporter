@@ -9,7 +9,6 @@
   },
   "author": "",
   "dependencies": {
-    "chai": "3.5.0",
     "cheerio": "0.22.0",
     "moment": "^2.14.1",
     "to-markdown": "3.0.1",
@@ -18,7 +17,6 @@
   "devDependencies": {
     "@types/jest": "^23.3.2",
     "@types/node": "^10.9.4",
-    "chai": "^3.5.0",
     "jest": "^23.6.0",
     "ts-jest": "^23.1.4",
     "typescript": "^3.0.3"

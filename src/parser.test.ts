@@ -1,4 +1,3 @@
-var assert = require("chai").assert;
 import { parse } from "./parser";
 
 describe("Parser", function() {
@@ -14,14 +13,13 @@ describe("Parser", function() {
 
     console.log(parse);
     var note = parse(data);
-    assert.deepEqual(note.title, "Ll");
+    expect(note.title).toBe("Ll");
     // FIXME: Is the extra space really required?
-    assert.deepEqual(
-      note.content,
+    expect(note.content).toBe(
       "Hearts of darkness  \nWater ship down  \nThe Dubliners"
     );
-    assert.deepEqual(note.tags, ["Reading List", "Another Tag"]);
-    assert.notOk(note.archived);
-    assert.deepEqual(note.date, "2016-06-21T20:39:47.000Z");
+    expect(note.tags).toEqual(["Reading List", "Another Tag"]);
+    expect(note.archived).toBe(false);
+    expect(note.date).toBe("2016-06-21T20:39:47.000Z");
   });
 });
