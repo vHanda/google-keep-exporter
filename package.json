@@ -4,7 +4,7 @@
   "description": "This is a tool which converts the Google Keep archive to markdown documents with YAML front matter. The Google Keep archive can be obtained from the Google Takeout page.",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha -u tdd ./"
+    "test": "./node_modules/.bin/mocha -u tdd ./dist/*.test.js"
   },
   "author": "",
   "dependencies": {
@@ -16,6 +16,9 @@
     "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "chai": "^3.5.0"
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.9.4",
+    "chai": "^3.5.0",
+    "typescript": "^3.0.3"
   }
 }
