@@ -4,21 +4,33 @@
   "description": "This is a tool which converts the Google Keep archive to markdown documents with YAML front matter. The Google Keep archive can be obtained from the Google Takeout page.",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha -u tdd ./dist/*.test.js"
+    "build": "tsc",
+    "test": "jest src/**"
   },
   "author": "",
   "dependencies": {
     "chai": "3.5.0",
     "cheerio": "0.22.0",
-    "mocha": "3.0.2",
     "moment": "^2.14.1",
     "to-markdown": "3.0.1",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.5",
+    "@types/jest": "^23.3.2",
     "@types/node": "^10.9.4",
     "chai": "^3.5.0",
+    "jest": "^23.6.0",
+    "ts-jest": "^23.1.4",
     "typescript": "^3.0.3"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
   }
 }

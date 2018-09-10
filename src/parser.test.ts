@@ -1,7 +1,7 @@
 var assert = require("chai").assert;
 import { parse } from "./parser";
 
-suite("Parser", function() {
+describe("Parser", function() {
   test("Should parse some basic info", function() {
     var data = `
 		<html><body><div class="note DEFAULT"><div class="heading">
