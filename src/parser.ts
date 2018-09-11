@@ -1,10 +1,11 @@
-var cheerio = require("cheerio");
+import * as cheerio from "cheerio";
+
 var toMarkdown = require("to-markdown");
 var chrono = require("chrono-node");
 
 import { Note } from "./types";
 
-function getImages(node: any) {
+function getImages(node: CheerioElement | CheerioElement[]) {
   var images: string[] = [];
   if (node instanceof Array) {
     node.forEach(child => {
@@ -21,7 +22,7 @@ function getImages(node: any) {
 
   if (!node.children) return [];
 
-  node.children.forEach((child: any) => {
+  node.children.forEach(child => {
     images = images.concat(getImages(child));
   });
   return images;
@@ -39,7 +40,7 @@ var converter = {
   }
 };
 
-export function parse(data: Buffer) {
+export function parse(data: string) {
   var $ = cheerio.load(data);
 
   var note = {} as Note;
@@ -58,11 +59,13 @@ export function parse(data: Buffer) {
   note.title = $(".title")
     .text()
     .trim();
-  note.archived = $.contains(".archived");
+
+  // FIXME: Detect archived notes!
+  note.archived = false; //$.contains($.root, ".archived");
 
   note.tags = $("span.label")
     .toArray()
-    .map(function(elem: any) {
+    .map(elem => {
       if (!elem.children) {
         return null;
       }

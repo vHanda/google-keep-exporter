@@ -28,7 +28,7 @@ try {
 } catch (e) {}
 
 var convert = function(filePath: string, outputDir: string) {
-  var data = fs.readFileSync(filePath);
+  var data = fs.readFileSync(filePath).toString();
   var note = parse(data);
   if (!note) {
     return;

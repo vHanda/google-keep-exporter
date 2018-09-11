@@ -11,7 +11,7 @@ describe("Parser", function() {
 		</div></body></html>
 		`;
 
-    var note = parse(Buffer.from(data, "utf8"));
+    var note = parse(data);
     expect(note.title).toBe("Ll");
     // FIXME: Is the extra space really required?
     expect(note.content).toBe(
