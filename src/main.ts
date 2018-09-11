@@ -42,5 +42,9 @@ var convert = function(filePath: string, outputDir: string) {
 };
 
 var files = fs.readdirSync(inputDir) as string[];
+if (files.indexOf("Keep") != -1 && files.indexOf("index.html") != -1) {
+  inputDir += "/Keep";
+  files = fs.readdirSync(inputDir) as string[];
+}
 files = files.filter(t => t.endsWith(".html"));
 files.forEach(filePath => convert(inputDir + "/" + filePath, outputDir));
