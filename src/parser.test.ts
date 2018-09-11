@@ -32,4 +32,13 @@ describe("Parser", function() {
     );
     expect(note.archived).toBe(true);
   });
+
+  test("Should parse todo lists", function() {
+    var data = fs
+      .readFileSync(__dirname + "/test_data/lists_todo.html")
+      .toString();
+    var note = parse(data);
+
+    expect(note.content).toBe("[ ] Localization\n" + "[x] Tablets screeshots");
+  });
 });
