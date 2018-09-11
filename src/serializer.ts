@@ -31,7 +31,7 @@ export function serialize(note: Note): SerializedNote[] {
 }
 
 var generateYamlFrontMatter = function(note: Note) {
-  var obj: any = note;
+  var obj: any = JSON.parse(JSON.stringify(note));
   delete obj.content;
   delete obj.attachments;
 
