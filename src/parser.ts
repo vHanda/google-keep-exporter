@@ -44,6 +44,9 @@ export function parse(data: string) {
 
   var note = {} as Note;
   note.content = $(".content").html();
+  if (!note.content) {
+    return;
+  }
   note.content = toMarkdown(note.content, { converters: [converter] }).trim();
 
   // FIXME: What about timezone?

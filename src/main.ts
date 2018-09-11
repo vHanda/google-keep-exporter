@@ -27,6 +27,9 @@ var outputDir = process.argv[3];
 var convert = function(filePath: string, outputDir: string) {
   var data = fs.readFileSync(filePath);
   var note = parse(data);
+  if (!note) {
+    return;
+  }
   var output = serialize(note);
 
   output.forEach(out => {
