@@ -2,8 +2,10 @@ var cheerio = require("cheerio");
 var toMarkdown = require("to-markdown");
 var moment = require("moment");
 
-function getImages(node) {
-  var images = [];
+import { Note } from "./types";
+
+function getImages(node: any) {
+  var images: string[] = [];
   if (node instanceof Array) {
     node.forEach(child => {
       images = images.concat(getImages(child));
@@ -19,7 +21,7 @@ function getImages(node) {
 
   if (!node.children) return [];
 
-  node.children.forEach(child => {
+  node.children.forEach((child: any) => {
     images = images.concat(getImages(child));
   });
   return images;
@@ -32,21 +34,12 @@ var converter = {
         return node.className.indexOf('listitem') != -1;
     },
     */
-  replacement: function(innerHTML, node) {
+  replacement: function(innerHTML: string, node: any) {
     return innerHTML + " ";
   }
 };
 
-export interface Note {
-    content: string;
-    title: string;
-    date: string;
-    archived: boolean;
-    tags: string[];
-    attachments: string[];
-}
-
-export function parse(data) {
+export function parse(data: string) {
   var $ = cheerio.load(data);
 
   var note = {} as Note;
@@ -64,12 +57,14 @@ export function parse(data) {
     .trim();
   note.archived = $.contains(".archived");
 
-  note.tags = $("span.label").toArray().map(function(elem) {
-    if (!elem.children) {
-      return null;
-    }
-    return elem.children[0].data;
-  });
+  note.tags = $("span.label")
+    .toArray()
+    .map(function(elem: any) {
+      if (!elem.children) {
+        return null;
+      }
+      return elem.children[0].data;
+    });
 
   var attachments = $("div.attachments").toArray();
   note.attachments = getImages(attachments);

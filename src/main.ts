@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 var fs = require("fs");
-var parser = require("./parser.js");
-var serializer = require("./serializer.js");
+
+import { parse } from "./parser";
+import { serialize } from "./serializer";
 
 // TODO: parse argv and get directory file list
 //       parse output
@@ -23,17 +24,17 @@ if (process.argv.length != 4) {
 var inputDir = process.argv[2];
 var outputDir = process.argv[3];
 
-var convert = function(filePath, outputDir) {
+var convert = function(filePath: string, outputDir: string) {
   var data = fs.readFileSync(filePath);
-  var note = parser(data);
-  var output = serializer.serialize(note);
+  var note = parse(data);
+  var output = serialize(note);
 
-  output.forEach(d => {
-    console.log(filePath, d[0]);
-    fs.writeFileSync(outputDir + "/" + d[0], d[1]);
+  output.forEach(out => {
+    console.log(filePath, out.fileName);
+    fs.writeFileSync(outputDir + "/" + out.fileName, out.content);
   });
 };
 
-var files = fs.readdirSync(inputDir);
+var files = fs.readdirSync(inputDir) as string[];
 files = files.filter(t => t.endsWith(".html"));
 files.forEach(filePath => convert(inputDir + "/" + filePath, outputDir));

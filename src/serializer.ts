@@ -1,65 +1,65 @@
-var fs = require("fs");
 var uuidV4 = require("uuid/v4");
+var YAML = require("json2yaml");
 
-/**
- * Takes a note and serializes it into [(fileName, content)]
- */
+import { Note } from "./types";
 
-var serialize = function(note) {
-  // FIXME: Serialize the attachments!
-  var out = note.attachments.map(generateAttachment);
+interface SerializedNote {
+  fileName: string;
+  content: string | Buffer;
+}
+
+export function serialize(note: Note): SerializedNote[] {
+  var serializedNotes: SerializedNote[] = [];
+
   var mainOutput = generateOutputFile(note);
+  var out = note.attachments.map(generateAttachment);
   out.forEach(a => {
-    var fileName = a[0];
+    var fileName = a[0].toString();
     mainOutput += "\n![](./" + fileName + ")\n";
+
+    serializedNotes.push({
+      fileName: fileName,
+      content: a[1]
+    });
   });
-  out.push([generateFilename(note), mainOutput]);
-  return out;
+
+  serializedNotes.push({
+    fileName: generateFilename(note),
+    content: mainOutput
+  });
+  return serializedNotes;
+}
+
+var generateYamlFrontMatter = function(note: Note) {
+  var obj: any = note;
+  delete obj.content;
+  delete obj.attachments;
+
+  const ymlText = YAML.stringify(obj);
+  return "---\n" + ymlText + "---";
 };
 
-var generateYamlFrontMatter = function(note) {
-  var lines = ["---"];
-  for (var key in note) {
-    if (!note.hasOwnProperty(key)) continue;
-
-    if (key == "content" || key == "attachments") continue;
-
-    var val = note[key];
-    if (val instanceof Array) {
-      if (val.length == 0) continue;
-      val = "[" + val.join(", ") + "]";
-    } else {
-      val = "" + val; // convert to string
-    }
-    if (val.trim().length == 0 || val == "false") continue;
-
-    lines.push(key + ": " + val);
-  }
-  lines.push("---");
-
-  return lines.join("\n");
-};
-
-function generateOutputFile(note) {
+function generateOutputFile(note: Note) {
   return generateYamlFrontMatter(note) + "\n" + note.content;
 }
 
-function generateFilename(note) {
-  function sanitizeString(str) {
+function generateFilename(note: Note) {
+  function sanitizeString(str: string) {
     var newStr = "";
     var re = /[A-Za-z0-9- ]/;
-    for (var key in str) {
-      var char = str[key];
-      if (char.match(re))
+    for (var x = 0; x < str.length; x++) {
+      let char = str[x];
+      if (char.match(re)) {
         if (char == " ") newStr += "-";
         else newStr += char;
+      }
     }
     return newStr;
   }
   return sanitizeString(note.title || note.date || uuidV4()) + ".md";
 }
 
-function generateAttachment(a) {
+function generateAttachment(a: string) {
   var regex = /^data:.+\/(.+);base64,(.*)$/;
   var matches = a.substr(0, 100).match(regex);
   var ext = matches[1];
