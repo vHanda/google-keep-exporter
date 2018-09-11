@@ -8,19 +8,11 @@ import * as tmp from "tmp";
 import { promisify } from "util";
 var extractZip = require("extract-zip");
 
-// TODO: parse argv and get directory file list
-//       parse output
-//
-
-// Take notes and then convert it into markdown
-//
-// .content
-// -> This needs to be converted to markdown
-//    -> listitem
-//
-
 if (process.argv.length != 4) {
-  console.log("Usage main.js inputDir outputDir");
+  console.log("Usage - main.js inputZip outputDir");
+  console.log("or");
+  console.log("Usage - main.js inputDir outputDir");
+
   process.exit(1);
 }
 
@@ -44,6 +36,8 @@ async function main(inputDir: string, outputDir: string) {
     inputDir = tmp.dirSync().name;
 
     try {
+      console.log("Unzipping ...");
+
       const extract = promisify(extractZip);
       await extract(inputFile, { dir: inputDir });
       inputDir += "/Takeout";
@@ -75,19 +69,30 @@ function convertNotes(
   outputDir: string
 ) {
   const files = inputFiles.filter(t => t.endsWith(".html"));
-  files.forEach(filePath => convertNote(inputDir + "/" + filePath, outputDir));
-  console.log("Done");
+
+  var notesConverted = 0;
+  files.forEach(filePath => {
+    var result = convertNote(inputDir + "/" + filePath, outputDir);
+    if (result) {
+      notesConverted += 1;
+    }
+  });
+
+  console.log("Converted " + notesConverted + " notes");
+  console.log("Output Dir: " + outputDir);
 }
 
-function convertNote(filePath: string, outputDir: string) {
+function convertNote(filePath: string, outputDir: string): boolean {
   var data = fs.readFileSync(filePath).toString();
   var note = parse(data);
   if (!note) {
-    return;
+    return false;
   }
   var output = serialize(note);
 
   output.forEach(out => {
     fs.writeFileSync(outputDir + "/" + out.fileName, out.content);
   });
+
+  return output.length > 0;
 }
