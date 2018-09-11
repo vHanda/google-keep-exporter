@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-var fs = require("fs");
-
+import * as fs from "fs";
 import { parse } from "./parser";
 import { serialize } from "./serializer";
 
@@ -23,6 +22,10 @@ if (process.argv.length != 4) {
 
 var inputDir = process.argv[2];
 var outputDir = process.argv[3];
+
+try {
+  fs.mkdirSync(outputDir);
+} catch (e) {}
 
 var convert = function(filePath: string, outputDir: string) {
   var data = fs.readFileSync(filePath);

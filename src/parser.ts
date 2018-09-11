@@ -39,7 +39,7 @@ var converter = {
   }
 };
 
-export function parse(data: string) {
+export function parse(data: Buffer) {
   var $ = cheerio.load(data);
 
   var note = {} as Note;
