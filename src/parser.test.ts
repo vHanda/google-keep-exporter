@@ -19,6 +19,6 @@ describe("Parser", function() {
     );
     expect(note.tags).toEqual(["Reading List", "Another Tag"]);
     expect(note.archived).toBe(false);
-    expect(note.date).toBe("2016-06-21T20:39:47.000Z");
+    expect(note.date).toBe("2016-06-21T22:39:47.000Z");
   });
 });
