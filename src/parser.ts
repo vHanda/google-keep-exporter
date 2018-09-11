@@ -1,9 +1,8 @@
 import * as cheerio from "cheerio";
-
-var toMarkdown = require("to-markdown");
-var chrono = require("chrono-node");
-
 import { Note } from "./types";
+
+var chrono = require("chrono-node");
+var TurndownService = require("turndown");
 
 function getImages(node: CheerioElement | CheerioElement[]) {
   var images: string[] = [];
@@ -28,27 +27,24 @@ function getImages(node: CheerioElement | CheerioElement[]) {
   return images;
 }
 
-var converter = {
-  filter: "div",
-  /*
-    filter: function(node) {
-        return node.className.indexOf('listitem') != -1;
-    },
-    */
-  replacement: function(innerHTML: string, node: any) {
-    return innerHTML + " ";
-  }
-};
-
 export function parse(data: string) {
   var $ = cheerio.load(data);
 
-  var note = {} as Note;
-  note.content = $(".content").html();
-  if (!note.content) {
+  const contentHtml = $(".content").html();
+  if (!contentHtml) {
     return;
   }
-  note.content = toMarkdown(note.content, { converters: [converter] }).trim();
+
+  const options = {};
+  var converter = new TurndownService(options);
+  var md: string = converter.turndown(contentHtml);
+  md = md.replace(/\u200e/g, "");
+  md = md.replace(/•/g, "*");
+  md = md.replace(/\*  /g, "* ");
+  md = md.replace(/^\s+|\s+$/gm, "");
+
+  var note = {} as Note;
+  note.content = md;
 
   // FIXME: What about timezone?
   note.date = $(".heading")
@@ -60,8 +56,7 @@ export function parse(data: string) {
     .text()
     .trim();
 
-  // FIXME: Detect archived notes!
-  note.archived = false; //$.contains($.root, ".archived");
+  note.archived = $("span.archived").length > 0;
 
   note.tags = $("span.label")
     .toArray()
