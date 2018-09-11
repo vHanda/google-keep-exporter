@@ -1,6 +1,6 @@
 var uuidV4 = require("uuid/v4");
-var YAML = require("json2yaml");
 
+import * as yaml from "js-yaml";
 import { Note } from "./types";
 
 interface SerializedNote {
@@ -10,8 +10,9 @@ interface SerializedNote {
 
 export function serialize(note: Note): SerializedNote[] {
   var serializedNotes: SerializedNote[] = [];
-
   var mainOutput = generateOutputFile(note);
+
+  note.attachments = note.attachments || [];
   var out = note.attachments.map(generateAttachment);
   out.forEach(a => {
     var fileName = a[0].toString();
@@ -35,8 +36,8 @@ var generateYamlFrontMatter = function(note: Note) {
   delete obj.content;
   delete obj.attachments;
 
-  const ymlText = YAML.stringify(obj);
-  return "---\n" + ymlText + "---";
+  const ymlText = yaml.dump(obj);
+  return "---\n" + ymlText + "---\n";
 };
 
 function generateOutputFile(note: Note) {
