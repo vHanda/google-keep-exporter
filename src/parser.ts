@@ -43,7 +43,7 @@ export function parse(data: string) {
   md = md.replace(/\*\s+/g, "* ");
   md = md.replace(/\* \u2610/g, "[ ]");
   md = md.replace(/\* \u2611/g, "[x]");
-  md = md.replace(/^\s+|\s+$/gm, "");
+  md = md.replace(/\s+$/gm, "");
 
   var note = {} as Note;
   note.content = md;
