@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "pkg": "pkg ./dist/main.js",
+    "pkg": "pkg -o google-keep-exporter --targets 'linux,macos,win' dist/main.js",
     "test": "jest src/**"
   },
-  "author": "",
+  "author": "Vishesh Handa <me@vhanda.in>",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
