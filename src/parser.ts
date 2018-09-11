@@ -1,6 +1,6 @@
 var cheerio = require("cheerio");
 var toMarkdown = require("to-markdown");
-var moment = require("moment");
+var chrono = require("chrono-node");
 
 import { Note } from "./types";
 
@@ -53,7 +53,7 @@ export function parse(data: Buffer) {
   note.date = $(".heading")
     .text()
     .trim();
-  note.date = moment(note.date).toISOString();
+  note.date = chrono.parseDate(note.date).toISOString();
 
   note.title = $(".title")
     .text()
