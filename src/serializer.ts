@@ -33,8 +33,14 @@ export function serialize(note: Note): SerializedNote[] {
 
 var generateYamlFrontMatter = function(note: Note) {
   var obj: any = JSON.parse(JSON.stringify(note));
+
   delete obj.content;
   delete obj.attachments;
+  for (const key in obj) {
+    if (!obj[key] || obj[key].length == 0) {
+      delete obj[key];
+    }
+  }
 
   const ymlText = yaml.dump(obj);
   return "---\n" + ymlText + "---\n";

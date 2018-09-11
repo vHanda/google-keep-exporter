@@ -18,4 +18,22 @@ Test`;
     expect(files.length).toBe(1);
     expect(files[0].content).toBe(expected);
   });
+
+  test("Should not serialize empty parts", function() {
+    var note: Note = {
+      content: "Test",
+      title: "",
+      tags: []
+    } as Note;
+
+    var expected = `---
+{}
+---
+
+Test`;
+
+    var files = serialize(note);
+    expect(files.length).toBe(1);
+    expect(files[0].content).toBe(expected);
+  });
 });
