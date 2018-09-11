@@ -21,6 +21,7 @@
     "@types/jest": "^23.3.2",
     "@types/js-yaml": "^3.11.2",
     "@types/node": "^10.9.4",
+    "coveralls": "^3.0.2",
     "jest": "^23.6.0",
     "pkg": "^4.3.4",
     "ts-jest": "^23.1.4",
