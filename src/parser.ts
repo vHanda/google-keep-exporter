@@ -66,7 +66,7 @@ export function parse(data: string) {
       if (!elem.children) {
         return null;
       }
-      return elem.children[0].data;
+      return elem.children[0].children[0].data;
     });
 
   var attachments = $("div.attachments").toArray();
