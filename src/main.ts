@@ -48,7 +48,7 @@ async function main(inputDir: string, outputDir: string) {
   }
 
   var files = fs.readdirSync(inputDir);
-  if (files.indexOf("Keep") != -1 && files.indexOf("index.html") != -1) {
+  if (files.indexOf("Keep") != -1) {
     inputDir += "/Keep";
     files = fs.readdirSync(inputDir);
   }
