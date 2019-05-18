@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "pkg": "pkg -o google-keep-exporter --targets 'linux,macos,win' dist/main.js",
+    "pkg": "pkg -o google-keep-exporter --targets 'node10-linux,node10-macos,node10-win' dist/main.js",
     "test": "jest src/**"
   },
   "author": "Vishesh Handa <me@vhanda.in>",
