@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 import * as fs from "fs";
+import * as tmp from "tmp";
+import { promisify } from "util";
 import { parse } from "./parser";
 import { serialize } from "./serializer";
 
-import * as tmp from "tmp";
-import { promisify } from "util";
 var extractZip = require("extract-zip");
 
 if (process.argv.length != 4) {
