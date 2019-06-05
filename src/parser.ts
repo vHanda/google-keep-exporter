@@ -66,7 +66,15 @@ export function parse(data: string) {
       if (!elem.children) {
         return null;
       }
-      return elem.children[0].children[0].data;
+      // classic tags format: <div class="labels"><span class="label">
+      if (elem.children[0].data) {
+        return elem.children[0].data
+      }
+      // alternate tags format: <div class="chips"><span class="chip label"><span class="label-name">
+      if (elem.children[0].children && elem.children[0].children[0].data) {
+        return elem.children[0].children[0].data;
+      }
+      return null;
     });
 
   var attachments = $("div.attachments").toArray();
