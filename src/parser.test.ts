@@ -9,9 +9,8 @@ describe("Parser", function() {
 		<div class="title">Ll</div>
 		<div class="content">Hearts of darkness<br>Water ship down<br>The Dubliners<br><br></div>
 		<div class="labels"><span class="label">Reading List</span><span class="label">Another Tag</span></div>
-		</div></body></html>
+    </div></body></html>
 		`;
-
     var note = parse(data);
     expect(note.title).toBe("Ll");
     expect(note.content).toBe(
@@ -21,7 +20,28 @@ describe("Parser", function() {
     expect(note.archived).toBe(false);
     expect(note.date).toBe("2016-06-21T22:39:47.000Z");
   });
+  test("Should parse alternate tag structure", function() {
+    var data = `
+		<html><body><div class="note DEFAULT"><div class="heading">
+		21 Jun 2016, 22:39:47</div>
+		<div class="title">Ll</div>
+		<div class="content">Hearts of darkness<br>Water ship down<br>The Dubliners<br><br></div>
+    <div class="chips">
+    <span class="chip label"><span class="label-name">Chip Label 1</span></span>
+    <span class="chip label"><span class="label-name">Chip Label 2</span>
+    </div>
+		</body></html>
+    `;
 
+    var note = parse(data);
+    expect(note.title).toBe("Ll");
+    expect(note.content).toBe(
+      "Hearts of darkness\nWater ship down\nThe Dubliners"
+    );
+    expect(note.tags).toEqual(["Chip Label 1", "Chip Label 2"]);
+    expect(note.archived).toBe(false);
+    expect(note.date).toBe("2016-06-21T22:39:47.000Z");
+  });
   test("Should parse lists", function() {
     var data = fs.readFileSync(__dirname + "/test_data/lists.html").toString();
     var note = parse(data);
