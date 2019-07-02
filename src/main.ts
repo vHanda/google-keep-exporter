@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import * as fs from "fs";
+import * as path from "path";
 import * as tmp from "tmp";
 import { promisify } from "util";
 import { parse } from "./parser";
@@ -47,11 +48,21 @@ async function main(inputDir: string, outputDir: string) {
     }
   }
 
-  var files = fs.readdirSync(inputDir);
-  if (files.indexOf("Keep") != -1) {
-    inputDir += "/Keep";
-    files = fs.readdirSync(inputDir);
-  }
+  // Collect all html files
+  var files: string[] = [];
+  var folders = fs.readdirSync(inputDir);
+  folders.forEach(folder => {
+    folder = path.join(inputDir, folder);
+    var stat = fs.lstatSync(folder);
+    if (stat.isDirectory()) {
+      var f = fs.readdirSync(folder);
+      f = f
+        .filter(filename => filename.toLowerCase().endsWith(".html"))
+        .map(filename => path.join(folder, filename));
+
+      files = files.concat(f);
+    }
+  });
 
   //
   // Output Sanitation
@@ -60,19 +71,13 @@ async function main(inputDir: string, outputDir: string) {
     fs.mkdirSync(outputDir);
   } catch (e) {}
 
-  convertNotes(inputDir, files, outputDir);
+  convertNotes(files, outputDir);
 }
 
-function convertNotes(
-  inputDir: string,
-  inputFiles: string[],
-  outputDir: string
-) {
-  const files = inputFiles.filter(t => t.endsWith(".html"));
-
+function convertNotes(inputFilePaths: string[], outputDir: string) {
   var notesConverted = 0;
-  files.forEach(filePath => {
-    var result = convertNote(inputDir + "/" + filePath, outputDir);
+  inputFilePaths.forEach(filePath => {
+    var result = convertNote(filePath, outputDir);
     if (result) {
       notesConverted += 1;
     }
