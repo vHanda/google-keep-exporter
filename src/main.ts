@@ -96,7 +96,7 @@ function convertNote(filePath: string, outputDir: string): boolean {
   var output = serialize(note);
 
   output.forEach(out => {
-    fs.writeFileSync(outputDir + "/" + out.fileName, out.content);
+    fs.writeFileSync(path.join(outputDir, out.fileName), out.content);
   });
 
   return output.length > 0;
