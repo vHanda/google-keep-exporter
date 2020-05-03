@@ -53,7 +53,7 @@ function generateOutputFile(note: Note) {
 function generateFilename(note: Note) {
   function sanitizeString(str: string) {
     var newStr = "";
-    var re = /[A-Za-z0-9- ]/;
+    var re = /[_ßàéèäöüÄÖÜA-Za-z0-9_ ]/;
     for (var x = 0; x < str.length; x++) {
       let char = str[x];
       if (char.match(re)) {
