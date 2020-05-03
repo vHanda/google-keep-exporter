@@ -63,7 +63,8 @@ function generateFilename(note: Note) {
     }
     return newStr;
   }
-  return sanitizeString(note.title || note.date || uuidV4()) + ".md";
+  const firstLine = note.content.trim().split('\n')[0];
+  return sanitizeString(note.title || firstLine || note.date || uuidV4()) + ".md";
 }
 
 function generateAttachment(a: string) {
