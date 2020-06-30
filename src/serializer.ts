@@ -76,6 +76,6 @@ function generateAttachment(a: string) {
   var matches = a.substr(0, 100).match(regex);
   var ext = matches[1];
   var data = a.substr(a.indexOf("base64") + 7);
-  var buffer = new Buffer(data, "base64");
+  var buffer = Buffer.from(data, "base64");
   return [uuidV4() + "." + ext, buffer];
 }
