@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import * as fs from "fs";
+import { createHash } from "crypto";
 import * as path from "path";
 import * as tmp from "tmp";
 import { promisify } from "util";
@@ -96,7 +97,24 @@ function convertNote(filePath: string, outputDir: string): boolean {
   var output = serialize(note);
 
   output.forEach(out => {
-    fs.writeFileSync(path.join(outputDir, out.fileName), out.content);
+    let outputPath = path.join(outputDir, out.fileName);
+    if (fs.existsSync(outputPath)) {
+      const ext = path.extname(outputPath)
+      const fileNameWithoutExt = out.fileName.replace(
+        new RegExp(ext + '$'),
+        ''
+      )
+      const fileHash = createHash('sha256')
+      fileHash.update(out.content)
+      const digest = fileHash
+        .digest("base64")
+        .replace(/[^A-Za-z0-9]/g, "")
+        .substring(0, 4);
+      const newFileName = `${fileNameWithoutExt}-${digest}${ext}`;
+      outputPath = path.join(outputDir, newFileName);
+    }
+
+    fs.writeFileSync(outputPath, out.content);
   });
 
   return output.length > 0;
