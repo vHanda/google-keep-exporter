@@ -3,6 +3,8 @@ var uuidV4 = require("uuid/v4");
 import * as yaml from "js-yaml";
 import { Note } from "./types";
 
+const MAX_FILENAME_LENGTH = 40;
+
 interface SerializedNote {
   fileName: string;
   content: string | Buffer;
@@ -61,11 +63,11 @@ function generateFilename(note: Note) {
         else newStr += char;
       }
     }
-    return newStr;
+    return newStr.substring(0, MAX_FILENAME_LENGTH);
   }
   const firstLine = note.content.trim().split('\n')[0];
   return sanitizeString(
-    note.title || firstLine || note.date || uuidV4()) 
+    note.title || firstLine || note.date || uuidV4())
     + ".md";
 }
 
